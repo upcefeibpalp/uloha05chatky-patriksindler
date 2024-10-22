@@ -3,7 +3,6 @@ package cz.fei.upce.cv05.evidence.chatek;
 import java.util.Scanner;
 
 public class EvidenceChatekApp {
-
     public static void main(String[] args) {
         // Konstanty pro definovani jednotlivych operaci (pouze pro cisty kod)
         final int KONEC_PROGRAMU = 0;
@@ -100,14 +99,47 @@ public class EvidenceChatekApp {
 
                 case ODEBRANI_NAVSTEVNIKU -> {
                     // TODO
+                    System.out.print("Zadej cislo chatky: ");
+                    int cisloChatky = scanner.nextInt() - 1;
+
+                    if (cisloChatky < 0 || cisloChatky >= chatky.length) {
+                        System.err.println("Tato chatka neexistuje");
+                        continue;
+                    }
+
+                    // Ziskani poctu navstevniku, kteri se chteji odhlasit
+                    System.out.print("Zadej pocet navstevniku k odhlasku: ");
+                    int pocetNavstevniku = scanner.nextInt();
+
+                    if (pocetNavstevniku <= 0 || pocetNavstevniku > chatky[cisloChatky]) {
+                        System.err.println("Neplatna hodnota pro pocet navstevniku");
+                        continue;
+                    }
+
+                    // Odeber navstevniky z chatky
+                    chatky[cisloChatky] -= pocetNavstevniku;
                 }
 
                 case CELKOVA_OBSAZENOST -> {
-                    // TODO
+                    int celkovaObsazenost = 0;
+                    for (int i = 0; i < chatky.length; i++) {
+                        celkovaObsazenost += chatky[i];
+                    }
+                    System.out.println("Celkova obsazenost kempu: " + celkovaObsazenost);
                 }
 
                 case VYPIS_PRAZDNE_CHATKY -> {
-                    // TODO
+                    boolean prazdne = true;
+                    System.out.println("Prazdne chatky:");
+                    for (int i = 0; i < chatky.length; i++) {
+                        if (chatky[i] == 0) {
+                            System.out.println("Chatka [" + (i + 1) + "] je prazdna.");
+                            prazdne = false;
+                        }
+                    }
+                    if (prazdne) {
+                        System.out.println("Vsechny chatky jsou obsazene.");
+                    }
                 }
 
                 case KONEC_PROGRAMU -> {
@@ -117,7 +149,7 @@ public class EvidenceChatekApp {
                 default -> {
                     System.err.println("Neplatna volba");
                 }
-            }
+            }           
         } while (operace != 0);
     }
 }
